@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+      <!-- mandango -->
+      <parameter key="mandango.class">Mandango\Mandango</parameter>
+      <parameter key="mandango.metadata_class">Model\Mapping\Metadata</parameter>
+      <parameter key="mandango.metadata_output">%kernel.root_dir%/../src/Model/Mapping</parameter>
+
+      <!-- mondator -->
+      <parameter key="mandango.mondator_class">Mandango\Mondator\Mondator</parameter>
+
+      <!-- logger -->
+      <parameter key="mandango.logger_class">Mandango\MandangoBundle\Logger\MandangoLogger</parameter>
+
+      <!-- data collector -->
+      <parameter key="mandango.data_collector_class">Mandango\MandangoBundle\DataCollector\MandangoDataCollector</parameter>
+    </parameters>
+
+    <services>
+      <!-- mandango -->
+      <service id="mandango" class="%mandango.class%">
+          <argument type="service" id="mandango.metadata" />
+          <argument type="service" id="mandango.query_cache" />
+      </service>
+
+      <service id="mandango.metadata" class="%mandango.metadata_class%">
+      </service>
+
+      <service id="mandango.query_cache" class="Doctrine\Common\Cache\ArrayCache" />
+
+      <!-- mondator -->
+      <service id="mandango.mondator" class="%mandango.mondator_class%">
+      </service>
+
+      <!-- logger -->
+      <service id="mandango.logger" class="%mandango.logger_class%">
+          <argument type="service" id="logger" on-invalid="null" />
+      </service>
+
+      <!-- data collector -->
+      <service id="mandango.data_collector" class="%mandango.data_collector_class%" public="false">
+          <tag name="data_collector" template="MandangoBundle:Collector:mandango" id="mandango" />
+          <argument type="service" id="mandango.logger" />
+      </service>
+    </services>
+</container>
