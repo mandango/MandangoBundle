@@ -45,6 +45,7 @@ class LoadFixturesCommand extends Command
         $this
             ->setName('mandango:load-fixtures')
             ->setDescription('Load fixtures.')
+            ->addOption('fixtures', null, InputOption::VALUE_OPTIONAL, 'The directory or file to load data fixtures from')
             ->addOption('append', null, InputOption::VALUE_OPTIONAL, 'Whether or not to append the data fixtures', false)
         ;
     }
@@ -56,23 +57,43 @@ class LoadFixturesCommand extends Command
     {
         $output->writeln('processing fixtures');
 
-        $data = array();
-        // application
-        if (is_dir($dir = $this->container->getParameter('kernel.root_dir').'/fixtures/mandango')) {
-            $finder = new Finder();
-            foreach ($finder->files()->name('*.yml')->followLinks()->in($dir) as $file) {
-                $data = Util::arrayDeepMerge($data, (array) Yaml::load($file));
+        $dirOrFile = $input->getOption('fixtures');
+        if ($dirOrFile) {
+            $dirOrFile = array($dirOrFile);
+        } else {
+            $dirOrFile = array();
+            // application
+            if (is_dir($dir = $this->container->getParameter('kernel.root_dir').'/fixtures/mandango')) {
+                $dirOrFile[] = $dir;
             }
-        }
-        // bundles
-        foreach ($this->container->get('kernel')->getBundles() as $bundle) {
-            if (is_dir($dir = $bundle->getPath().'/Resources/fixtures/mandango'))
-            {
-                $finder = new Finder();
-                foreach ($finder->files()->name('*.yml')->followLinks()->in($dir) as $file) {
-                    $data = Utile::arrayDeepMerge($data, (array) Yaml::load($file));
+            // bundles
+            foreach ($this->container->get('kernel')->getBundles() as $bundle) {
+                if (is_dir($dir = $bundle->getPath().'/Resources/fixtures/mandango')) {
+                    $dirOrFile[] = $dir;
                 }
             }
+        }
+
+        $files = array();
+        foreach ($dirOrFile as $dir) {
+            if (is_file($dir)) {
+                $files[] = $dir;
+                continue;
+            }
+            if (is_dir($dir)) {
+                $finder = new Finder();
+                foreach ($finder->files()->name('*.yml')->followLinks()->in($dir) as $file) {
+                    $files[] = $file;
+                }
+                continue;
+            }
+
+            throw new \InvalidArgumentException(sprintf('"%s" is not a dir or file.', $dir));
+        }
+
+        $data = array();
+        foreach ($files as $file) {
+            $data = Util::arrayDeepMerge($data, (array) Yaml::load($file));
         }
 
         if (!$data) {
