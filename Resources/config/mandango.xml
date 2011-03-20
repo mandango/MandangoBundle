@@ -10,6 +10,10 @@
       <parameter key="mandango.metadata_class">Model\Mapping\Metadata</parameter>
       <parameter key="mandango.metadata_output">%kernel.root_dir%/../src/Model/Mapping</parameter>
 
+      <!-- cache -->
+      <parameter key="mandango.cache.filesystem_cache">Mandango\Cache\FilesystemCache</parameter>
+      <parameter key="mandango.cache.filesystem_cache.dir">%kernel.cache_dir%/mandango/query_cache</parameter>
+
       <!-- mondator -->
       <parameter key="mandango.mondator_class">Mandango\Mondator\Mondator</parameter>
 
@@ -24,13 +28,16 @@
       <!-- mandango -->
       <service id="mandango" class="%mandango.class%">
           <argument type="service" id="mandango.metadata" />
-          <argument type="service" id="mandango.query_cache" />
+          <argument type="service" id="mandango.query_cache.filesystem" />
       </service>
 
       <service id="mandango.metadata" class="%mandango.metadata_class%">
       </service>
 
-      <service id="mandango.query_cache" class="Doctrine\Common\Cache\ArrayCache" />
+      <!-- query cache -->
+      <service id="mandango.query_cache.filesystem" class="%mandango.cache.filesystem_cache%">
+          <argument>%mandango.cache.filesystem_cache.dir%</argument>
+      </service>
 
       <!-- mondator -->
       <service id="mandango.mondator" class="%mandango.mondator_class%">
