@@ -46,8 +46,10 @@ class Configuration
         $this->addConnectionsSection($rootNode);
 
         $rootNode
-            ->booleanNode('logging')->end()
-            ->scalarNode('default_connection')->end()
+            ->children()
+                ->booleanNode('logging')->end()
+                ->scalarNode('default_connection')->end()
+            ->end()
         ;
 
         return $treeBuilder->buildTree();
@@ -56,18 +58,22 @@ class Configuration
     /**
      * Adds the configuration for the "connections" key
      */
-    protected function addConnectionsSection(NodeBuilder $rootNode)
+    protected function addConnectionsSection($rootNode)
     {
         $rootNode
             ->fixXmlConfig('connection')
-            ->arrayNode('connections')
-                ->useAttributeAsKey('id')
-                ->prototype('array')
-                    ->performNoDeepMerging()
-                    ->scalarNode('class')->defaultValue('Mandango\Connection')->end()
-                    ->scalarNode('server')->end()
-                    ->scalarNode('database')->end()
-                    ->builder($this->addConnectionOptionsNode())
+            ->children()
+                ->arrayNode('connections')
+                    ->useAttributeAsKey('id')
+                    ->prototype('array')
+                        //->performNoDeepMerging()
+                        ->children()
+                            ->scalarNode('class')->defaultValue('Mandango\Connection')->end()
+                            ->scalarNode('server')->end()
+                            ->scalarNode('database')->end()
+                        ->end()
+                        ->append($this->addConnectionOptionsNode())
+                    ->end()
                 ->end()
             ->end()
         ;
@@ -78,20 +84,22 @@ class Configuration
      */
     protected function addConnectionOptionsNode()
     {
-        $node = new NodeBuilder('options', 'array');
+        $builder = new TreeBuilder();
+        $node = $builder->root('options');
 
         $node
             ->performNoDeepMerging()
             ->addDefaultsIfNotSet() // adds an empty array of omitted
-
             // options go into the Mongo constructor
             // http://www.php.net/manual/en/mongo.construct.php
-            ->booleanNode('connect')->end()
-            ->scalarNode('persist')->end()
-            ->scalarNode('timeout')->end()
-            ->booleanNode('replicaSet')->end()
-            ->scalarNode('username')->end()
-            ->scalarNode('password')->end()
+            ->children()
+                ->booleanNode('connect')->end()
+                ->scalarNode('persist')->end()
+                ->scalarNode('timeout')->end()
+                ->booleanNode('replicaSet')->end()
+                ->scalarNode('username')->end()
+                ->scalarNode('password')->end()
+            ->end()
         ->end();
 
         return $node;
