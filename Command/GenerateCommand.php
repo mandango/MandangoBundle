@@ -77,7 +77,7 @@ class GenerateCommand extends Command
         // bundles
         $configClassesPending = array();
         foreach ($this->container->get('kernel')->getBundles() as $bundle) {
-            $bundleModelNamespace = 'Model\\'.$bundle->getName();
+            $bundleModelNamespace = 'Model\\'.substr($bundle->getName(), 0, strlen($bundle->getName()) - strlen('Bundle'));
 
             if (is_dir($dir = $bundle->getPath().'/Resources/config/mandango')) {
                 $finder = new Finder();
