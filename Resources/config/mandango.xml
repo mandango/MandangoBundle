@@ -50,7 +50,7 @@
 
       <!-- data collector -->
       <service id="mandango.data_collector" class="%mandango.data_collector_class%" public="false">
-          <tag name="data_collector" template="MandangoBundle:Collector:mandango" id="mandango" />
+          <tag name="data_collector" template="Mandango:Collector:mandango" id="mandango" />
           <argument type="service" id="mandango.logger" />
       </service>
     </services>
