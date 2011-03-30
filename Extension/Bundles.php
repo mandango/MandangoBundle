@@ -35,7 +35,7 @@ class Bundles extends Extension
     /**
      * {@inheritdoc}
      */
-    protected function doProcess()
+    protected function doClassProcess()
     {
         foreach (array('bundle_name', 'bundle_namespace', 'bundle_dir') as $parameter) {
             if (!isset($this->configClass[$parameter]) || !$this->configClass[$parameter]) {
@@ -71,17 +71,19 @@ class Bundles extends Extension
 EOF
         );
 
-        // repository
-        $this->definitions['repository']->setParentClass('\\'.$classes['repository_bundle']);
+        if (!$this->configClass['is_embedded']) {
+            // repository
+            $this->definitions['repository']->setParentClass('\\'.$classes['repository_bundle']);
 
-        $output = new Output($this->configClass['bundle_dir'].'/Document');
-        $this->definitions['repository_bundle'] = new Definition($classes['repository_bundle'], $output);
-        $this->definitions['repository_bundle']->setParentClass('\\'.$this->definitions['repository_base']->getClass());
-        $this->definitions['repository_bundle']->setDocComment(<<<EOF
+            $output = new Output($this->configClass['bundle_dir'].'/Document');
+            $this->definitions['repository_bundle'] = new Definition($classes['repository_bundle'], $output);
+            $this->definitions['repository_bundle']->setParentClass('\\'.$this->definitions['repository_base']->getClass());
+            $this->definitions['repository_bundle']->setDocComment(<<<EOF
 /**
  * {$this->class} document repository bundle
  */
 EOF
-        );
+            );
+        }
     }
 }
