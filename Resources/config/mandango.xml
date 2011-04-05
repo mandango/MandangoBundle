@@ -53,5 +53,10 @@
           <tag name="data_collector" template="MandangoBundle:Collector:mandango" id="mandango" />
           <argument type="service" id="mandango.logger" />
       </service>
+
+      <!-- form -->
+      <service id="form.type.mandango_document" class="Mandango\MandangoBundle\Form\Type\MandangoDocumentType">
+          <tag name="form.type" alias="mandango_document" />
+      </service>
     </services>
 </container>
