@@ -51,8 +51,6 @@ class MandangoValidatorTypeGuesser extends ValidatorTypeGuesser
     {
         $property = $this->renameProperty($class, $property);
 
-        var_dump($class, $property);
-
         return parent::guessRequired($class, $property);
     }
 
