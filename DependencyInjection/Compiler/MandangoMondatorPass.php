@@ -44,8 +44,8 @@ class MandangoMondatorPass implements CompilerPassInterface
         // core
         $definition = new Definition('Mandango\Extension\Core');
         $definition->addArgument(array(
-            'metadata_class'  => $container->getParameter('mandango.metadata_class'),
-            'metadata_output' => $container->getParameter('mandango.metadata_output'),
+            'metadata_class'  => $container->getParameter('mandango.metadata.class'),
+            'metadata_output' => $container->getParameter('mandango.metadata.output'),
         ));
         $container->setDefinition('mandango.extension.core', $definition);
 

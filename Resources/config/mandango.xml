@@ -7,56 +7,70 @@
     <parameters>
       <!-- mandango -->
       <parameter key="mandango.class">Mandango\Mandango</parameter>
-      <parameter key="mandango.metadata_class">Model\Mapping\Metadata</parameter>
-      <parameter key="mandango.metadata_output">%kernel.root_dir%/../src/Model/Mapping</parameter>
+      <parameter key="mandango.metadata.class">Model\Mapping\Metadata</parameter>
+      <parameter key="mandango.metadata.output">%kernel.root_dir%/../src/Model/Mapping</parameter>
 
       <!-- cache -->
-      <parameter key="mandango.cache.filesystem_cache">Mandango\Cache\FilesystemCache</parameter>
+      <parameter key="mandango.cache.filesystem_cache.class">Mandango\Cache\FilesystemCache</parameter>
       <parameter key="mandango.cache.filesystem_cache.dir">%kernel.cache_dir%/mandango/query_cache</parameter>
 
       <!-- mondator -->
-      <parameter key="mandango.mondator_class">Mandango\Mondator\Mondator</parameter>
+      <parameter key="mandango.mondator.class">Mandango\Mondator\Mondator</parameter>
 
       <!-- logger -->
-      <parameter key="mandango.logger_class">Mandango\MandangoBundle\Logger\MandangoLogger</parameter>
+      <parameter key="mandango.logger.class">Mandango\MandangoBundle\Logger\MandangoLogger</parameter>
 
       <!-- data collector -->
-      <parameter key="mandango.data_collector_class">Mandango\MandangoBundle\DataCollector\MandangoDataCollector</parameter>
+      <parameter key="mandango.data_collector.class">Mandango\MandangoBundle\DataCollector\MandangoDataCollector</parameter>
+
+      <!-- form -->
+      <parameter key="form.type.mandango_document.class">Mandango\MandangoBundle\Form\Type\MandangoDocumentType</parameter>
+      <parameter key="form.guesser.mandango_document.class">Mandango\MandangoBundle\Form\Type\Guesser\MandangoDocumentTypeGuesser</parameter>
+      <parameter key="form.guesser.mandango_validator.class">Mandango\MandangoBundle\Form\Type\Guesser\MandangoValidatorTypeGuesser</parameter>
     </parameters>
 
     <services>
-      <!-- mandango -->
-      <service id="mandango" class="%mandango.class%">
-          <argument type="service" id="mandango.metadata" />
-          <argument type="service" id="mandango.query_cache.filesystem" />
-      </service>
+        <!-- mandango -->
+        <service id="mandango" class="%mandango.class%">
+            <argument type="service" id="mandango.metadata" />
+            <argument type="service" id="mandango.query_cache.filesystem" />
+        </service>
 
-      <service id="mandango.metadata" class="%mandango.metadata_class%">
-      </service>
+        <service id="mandango.metadata" class="%mandango.metadata.class%">
+        </service>
 
-      <!-- query cache -->
-      <service id="mandango.query_cache.filesystem" class="%mandango.cache.filesystem_cache%">
-          <argument>%mandango.cache.filesystem_cache.dir%</argument>
-      </service>
+        <!-- query cache -->
+        <service id="mandango.query_cache.filesystem" class="%mandango.cache.filesystem_cache.class%">
+            <argument>%mandango.cache.filesystem_cache.dir%</argument>
+        </service>
 
-      <!-- mondator -->
-      <service id="mandango.mondator" class="%mandango.mondator_class%">
-      </service>
+        <!-- mondator -->
+        <service id="mandango.mondator" class="%mandango.mondator.class%">
+        </service>
 
-      <!-- logger -->
-      <service id="mandango.logger" class="%mandango.logger_class%">
-          <argument type="service" id="logger" on-invalid="null" />
-      </service>
+        <!-- logger -->
+        <service id="mandango.logger" class="%mandango.logger.class%">
+            <argument type="service" id="logger" on-invalid="null" />
+        </service>
 
-      <!-- data collector -->
-      <service id="mandango.data_collector" class="%mandango.data_collector_class%" public="false">
-          <tag name="data_collector" template="MandangoBundle:Collector:mandango" id="mandango" />
-          <argument type="service" id="mandango.logger" />
-      </service>
+        <!-- data collector -->
+        <service id="mandango.data_collector" class="%mandango.data_collector.class%" public="false">
+            <tag name="data_collector" template="MandangoBundle:Collector:mandango" id="mandango" />
+            <argument type="service" id="mandango.logger" />
+        </service>
 
-      <!-- form -->
-      <service id="form.type.mandango_document" class="Mandango\MandangoBundle\Form\Type\MandangoDocumentType">
-          <tag name="form.type" alias="mandango_document" />
-      </service>
+        <!-- form -->
+        <service id="form.type.mandango_document" class="%form.type.mandango_document.class%">
+            <tag name="form.type" alias="mandango_document" />
+        </service>
+
+        <service id="form.guesser.mandango_document" class="%form.guesser.mandango_document.class%" public="false">
+            <tag name="form.guesser" />
+        </service>
+
+        <service id="form.guesser.mandango_validator" class="%form.guesser.mandango_validator.class%" public="false">
+            <tag name="form.guesser" />
+            <argument type="service" id="validator.mapping.class_metadata_factory" />
+        </service>
     </services>
 </container>
