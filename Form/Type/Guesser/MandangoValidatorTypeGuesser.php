@@ -21,8 +21,10 @@
 
 namespace Mandango\MandangoBundle\Form\Type\Guesser;
 
-use Mandango\Inflector;
 use Symfony\Component\Form\Type\Guesser\ValidatorTypeGuesser;
+use Symfony\Component\Validator\Mapping\ClassMetadataFactoryInterface;
+use Mandango\Inflector;
+use Mandango\Metadata;
 
 /**
  * MandangoValidatorTypeGuesser.
@@ -34,6 +36,20 @@ use Symfony\Component\Form\Type\Guesser\ValidatorTypeGuesser;
  */
 class MandangoValidatorTypeGuesser extends ValidatorTypeGuesser
 {
+    private $metadata;
+
+    /**
+     * Constructor.
+     *
+     * @param Mandango\Metadata $metadata The Mandango's metadata.
+     */
+    public function __construct(Metadata $metadata, ClassMetadataFactoryInterface $metadataFactory)
+    {
+        $this->metadata = $metadata;
+
+        parent::__construct($metadataFactory);
+    }
+
     /**
      * @inheritDoc
      */
@@ -66,6 +82,10 @@ class MandangoValidatorTypeGuesser extends ValidatorTypeGuesser
 
     protected function renameProperty($class, $property)
     {
+        if (!$this->metadata->hasClass($class)) {
+            return $property;
+        }
+
         $metadata = call_user_func(array($class, 'metadata'));
 
         if (

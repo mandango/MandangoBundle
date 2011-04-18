@@ -62,14 +62,17 @@
         <!-- form -->
         <service id="form.type.mandango_document" class="%form.type.mandango_document.class%">
             <tag name="form.type" alias="mandango_document" />
+            <argument type="service" id="mandango.metadata" />
         </service>
 
         <service id="form.guesser.mandango_document" class="%form.guesser.mandango_document.class%" public="false">
             <tag name="form.guesser" />
+            <argument type="service" id="mandango.metadata" />
         </service>
 
         <service id="form.guesser.mandango_validator" class="%form.guesser.mandango_validator.class%" public="false">
             <tag name="form.guesser" />
+            <argument type="service" id="mandango.metadata" />
             <argument type="service" id="validator.mapping.class_metadata_factory" />
         </service>
     </services>

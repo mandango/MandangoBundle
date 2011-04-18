@@ -24,6 +24,7 @@ namespace Mandango\MandangoBundle\Form\Type\Guesser;
 use Symfony\Component\Form\Type\Guesser\Guess;
 use Symfony\Component\Form\Type\Guesser\TypeGuess;
 use Symfony\Component\Form\Type\Guesser\TypeGuesserInterface;
+use Mandango\Metadata;
 
 /**
  * MandangoDocumentTypeGuesser
@@ -32,6 +33,18 @@ use Symfony\Component\Form\Type\Guesser\TypeGuesserInterface;
  */
 class MandangoDocumentTypeGuesser implements TypeGuesserInterface
 {
+    private $metadata;
+
+    /**
+     * Constructor.
+     *
+     * @param Mandango\Metadata $metadata The Mandango's metadata.
+     */
+    public function __construct(Metadata $metadata)
+    {
+        $this->metadata = $metadata;
+    }
+
     /**
      * @inheritDoc
      */
@@ -77,6 +90,10 @@ class MandangoDocumentTypeGuesser implements TypeGuesserInterface
 
     protected function getClassMetadata($class)
     {
+        if (!$this->metadata->hasClass($class)) {
+            return array();
+        }
+
         return call_user_func(array($class, 'metadata'));
     }
 }
