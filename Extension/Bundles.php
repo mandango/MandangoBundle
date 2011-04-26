@@ -62,7 +62,7 @@ class Bundles extends Extension
 EOF
         );
 
-        if (!$this->configClass['is_embedded']) {
+        if (!$this->configClass['isEmbedded']) {
             // repository
             $this->definitions['repository']->setParentClass('\\'.$classes['repository_bundle']);
 
