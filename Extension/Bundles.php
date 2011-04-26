@@ -54,7 +54,7 @@ class Bundles extends Extension
         $output = new Output($this->configClass['bundle_dir'].'/Model');
         $this->definitions['document_bundle'] = new Definition($classes['document_bundle'], $output);
         $this->definitions['document_bundle']->setParentClass('\\'.$this->definitions['document_base']->getClass());
-        $this->definitions['document_bundle']->setIsAbstract(true);
+        $this->definitions['document_bundle']->setAbstract(true);
         $this->definitions['document_bundle']->setDocComment(<<<EOF
 /**
  * {$this->class} bundle document.

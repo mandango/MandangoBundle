@@ -13,8 +13,10 @@ namespace Mandango\MandangoBundle\Form\Type;
 
 use Mandango\MandangoBundle\Form\ChoiceList\MandangoDocumentChoiceList;
 use Mandango\MandangoBundle\Form\DataTransformer\MandangoDocumentToIdTransformer;
+use Mandango\MandangoBundle\Form\DataTransformer\MandangoDocumentsToArrayTransformer;
+use Mandango\MandangoBundle\Form\EventListener\MergeGroupListener;
 use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\Form\Type\AbstractType;
+use Symfony\Component\Form\AbstractType;
 
 /**
  * MandangoDocumentType.
@@ -29,7 +31,10 @@ class MandangoDocumentType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         if ($options['multiple']) {
-            throw new \RuntimeException('Not implemented yet.');
+            $builder
+                ->addEventSubscriber(new MergeGroupListener())
+                ->prependClientTransformer(new MandangoDocumentsToArrayTransformer($options['choice_list']))
+            ;
         } else {
             $builder->prependClientTransformer(new MandangoDocumentToIdTransformer($options['choice_list']));
         }

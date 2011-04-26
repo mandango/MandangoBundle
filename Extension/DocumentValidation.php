@@ -11,7 +11,6 @@
 
 namespace Mandango\MandangoBundle\Extension;
 
-use Mandango\Inflector;
 use Mandango\Mondator\Definition\Method;
 use Mandango\Mondator\Dumper;
 use Mandango\Mondator\Extension;
@@ -39,27 +38,36 @@ class DocumentValidation extends Extension
         }
 
         // getters
+
+        // fields
         foreach ($this->configClass['fields'] as $name => $field) {
-            // base
-            $baseFieldValidation = array();
-
-            // custom
-            $customFieldValidation = array();
-            // notnull
-            if (isset($field['notnull']) && $field['notnull']) {
-                $customFieldValidation[] = array('NotNull' => null);
-            }
-            // notblank
-            if (isset($field['notblank']) && $field['notblank']) {
-                $customFieldValidation[] = array('NotBlank' => null);
-            }
-            // explicit
             if (isset($field['validation']) && $field['validation']) {
-                $customFieldValidation = array_merge($customFieldValidation, $field['validation']);
+                $validation['getters'][$name] = $field['validation'];
             }
-
-            // merge
-            $validation['getters'][Inflector::camelize($name)] = array_merge_recursive($customFieldValidation, $baseFieldValidation);
+        }
+        // referencesOne
+        foreach ($this->configClass['referencesOne'] as $name => $referenceOne) {
+            if (isset($referenceOne['validation']) && $referenceOne['validation']) {
+                $validation['getters'][$name] = $referenceOne['validation'];
+            }
+        }
+        // referencesMany
+        foreach ($this->configClass['referencesMany'] as $name => $referenceMany) {
+            if (isset($referenceMany['validation']) && $referenceMany['validation']) {
+                $validation['getters'][$name] = $referenceMany['validation'];
+            }
+        }
+        // embeddedsOne
+        foreach ($this->configClass['embeddedsOne'] as $name => $embeddedOne) {
+            if (isset($embeddedOne['validation']) && $embeddedOne['validation']) {
+                $validation['getters'][$name] = $embeddedOne['validation'];
+            }
+        }
+        // embeddedsMany
+        foreach ($this->configClass['embeddedsMany'] as $name => $embeddedMany) {
+            if (isset($embeddedMany['validation']) && $embeddedMany['validation']) {
+                $validation['getters'][$name] = $embeddedMany['validation'];
+            }
         }
 
         $validation = Dumper::exportArray($validation, 12);
@@ -80,7 +88,7 @@ class DocumentValidation extends Extension
         return true;
 EOF
         );
-        $method->setIsStatic(true);
+        $method->setStatic(true);
         $method->setDocComment(<<<EOF
     /**
      * Maps the validation.

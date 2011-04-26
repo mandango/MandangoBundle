@@ -9,19 +9,19 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Mandango\MandangoBundle\Form\Type\Guesser;
+namespace Mandango\MandangoBundle\Form;
 
-use Symfony\Component\Form\Type\Guesser\Guess;
-use Symfony\Component\Form\Type\Guesser\TypeGuess;
-use Symfony\Component\Form\Type\Guesser\TypeGuesserInterface;
+use Symfony\Component\Form\FormTypeGuesserInterface;
+use Symfony\Component\Form\Guess\Guess;
+use Symfony\Component\Form\Guess\TypeGuess;
 use Mandango\Metadata;
 
 /**
- * MandangoDocumentTypeGuesser
+ * MandangoTypeGuesser
  *
  * @author Pablo Díez <pablodip@gmail.com>
  */
-class MandangoDocumentTypeGuesser implements TypeGuesserInterface
+class MandangoTypeGuesser implements FormTypeGuesserInterface
 {
     private $metadata;
 
@@ -40,7 +40,11 @@ class MandangoDocumentTypeGuesser implements TypeGuesserInterface
      */
     public function guessType($class, $property)
     {
-        $metadata = $this->getClassMetadata($class);
+        if (!$this->metadata->hasClass($class)) {
+            return;
+        }
+
+        $metadata = $class::getMetadata();
 
         // field
         if (isset($metadata['fields'][$property])) {
@@ -62,6 +66,21 @@ class MandangoDocumentTypeGuesser implements TypeGuesserInterface
                     return new TypeGuess('text', array(), Guess::MEDIUM_CONFIDENCE);
             }
         }
+
+        // referencesOne
+        if (isset($metadata['referencesOne'][$property])) {
+            return new TypeGuess('mandango_document', array(
+                'class' => $metadata['referencesOne'][$property]['class'],
+            ), Guess::HIGH_CONFIDENCE);
+        }
+
+        // referencesMany
+        if (isset($metadata['referencesMany'][$property])) {
+            return new TypeGuess('mandango_document', array(
+                'class' => $metadata['referencesMany'][$property]['class'],
+                'multiple' => true,
+            ), Guess::HIGH_CONFIDENCE);
+        }
     }
 
     /**
@@ -76,14 +95,5 @@ class MandangoDocumentTypeGuesser implements TypeGuesserInterface
      */
     public function guessMaxLength($class, $property)
     {
-    }
-
-    protected function getClassMetadata($class)
-    {
-        if (!$this->metadata->hasClass($class)) {
-            return array();
-        }
-
-        return call_user_func(array($class, 'metadata'));
     }
 }
