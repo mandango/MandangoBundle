@@ -44,7 +44,7 @@ class MandangoUserProvider implements UserProviderInterface
     public function loadUserByUsername($username)
     {
         $class = $this->class;
-        $repository = $class::repository();
+        $repository = $class::getRepository();
 
         if (null !== $this->property) {
             $user = $repository->query(array($this->property => $username))->one();
