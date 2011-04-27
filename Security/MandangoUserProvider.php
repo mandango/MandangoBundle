@@ -47,7 +47,7 @@ class MandangoUserProvider implements UserProviderInterface
         $repository = $class::getRepository();
 
         if (null !== $this->property) {
-            $user = $repository->query(array($this->property => $username))->one();
+            $user = $repository->createQuery(array($this->property => $username))->one();
         } else {
             if (!$repository instanceof UserProviderInterface) {
                 throw new \InvalidArgumentException(sprintf('The Mandango repository "%s" must implement UserProviderInterface.', get_class($repository)));
