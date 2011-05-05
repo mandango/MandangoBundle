@@ -95,6 +95,6 @@ class LoadFixturesCommand extends Command
         $output->writeln('loading fixtures');
 
         $dataLoader = new DataLoader($this->container->get('mandango'));
-        $dataLoader->load($data, true);
+        $dataLoader->load($data, $input->getOption('append'));
     }
 }
