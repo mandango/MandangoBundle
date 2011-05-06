@@ -41,6 +41,24 @@ class MandangoExtension extends Extension
         $configuration = new Configuration($container->getParameter('kernel.debug'));
         $config = $processor->process($configuration->getConfigTree(), $configs);
 
+        // model_dir
+        if (isset($config['model_dir'])) {
+            $container->setParameter('mandango.model_dir', $config['model_dir']);
+        }
+
+        // logging
+        if (isset($config['logging']) && $config['logging']) {
+            $container->getDefinition('mandango')->addArgument(array(new Reference('mandango.logger'), 'logQuery'));
+        }
+
+        // default_connection
+        if (isset($config['default_connection'])) {
+            $container->getDefinition('mandango')->addMethodCall('setDefaultConnectionName', array($config['default_connection']));
+        }
+
+        // extra config classes dirs
+        $container->setParameter('mandango.extra_config_classes_dirs', $config['extra_config_classes_dirs']);
+
         // connections
         foreach ($config['connections'] as $name => $connection) {
             $definition = new Definition($connection['class'], array(
@@ -57,16 +75,6 @@ class MandangoExtension extends Extension
                 $name,
                 new Reference($connectionDefinitionName),
             ));
-        }
-
-        // default_connection
-        if (isset($config['default_connection'])) {
-            $container->getDefinition('mandango')->addMethodCall('setDefaultConnectionName', array($config['default_connection']));
-        }
-
-        // logging
-        if (isset($config['logging']) && $config['logging']) {
-            $container->getDefinition('mandango')->addArgument(array(new Reference('mandango.logger'), 'logQuery'));
         }
     }
 }

@@ -42,25 +42,31 @@ class GenerateCommand extends Command
     {
         $output->writeln('processing config classes');
 
-        $modelDir = $this->container->getParameter('kernel.root_dir').'/../src/Model';
+        $modelDir = $this->container->getParameter('mandango.model_dir');
+
         $configClasses = array();
-        // application
-        if (is_dir($dir = $this->container->getParameter('kernel.root_dir').'/config/mandango')) {
-            $finder = new Finder();
-            foreach ($finder->files()->name('*.yml')->followLinks()->in($dir) as $file) {
-                foreach ((array) Yaml::load($file) as $class => $configClass) {
-                    // class
-                    if (0 !== strpos($class, 'Model\\')) {
-                        throw new \RuntimeException('The Mandango documents must been in the "Model\" namespace.');
+        // application + extra
+        foreach (array_merge(
+            array($this->container->getParameter('kernel.root_dir').'/config/mandango'),
+            $this->container->getParameter('mandango.extra_config_classes_dirs')
+        ) as $dir) {
+            if (is_dir($dir)) {
+                $finder = new Finder();
+                foreach ($finder->files()->name('*.yml')->followLinks()->in($dir) as $file) {
+                    foreach ((array) Yaml::load($file) as $class => $configClass) {
+                        // class
+                        if (0 !== strpos($class, 'Model\\')) {
+                            throw new \RuntimeException('The Mandango documents must been in the "Model\" namespace.');
+                        }
+
+                        // config class
+                        $configClass['output'] = $modelDir.'/'.str_replace('\\', '/', substr(substr($class, 0, strrpos($class, '\\')), 6));
+                        $configClass['bundle_name']      = null;
+                        $configClass['bundle_namespace'] = null;
+                        $configClass['bundle_dir']       = null;
+
+                        $configClasses[$class] = $configClass;
                     }
-
-                    // config class
-                    $configClass['output'] = $modelDir.'/'.str_replace('\\', '/', substr(substr($class, 0, strrpos($class, '\\')), 6));
-                    $configClass['bundle_name']      = null;
-                    $configClass['bundle_namespace'] = null;
-                    $configClass['bundle_dir']       = null;
-
-                    $configClasses[$class] = $configClass;
                 }
             }
         }

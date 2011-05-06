@@ -33,14 +33,21 @@ class Configuration
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('mandango', 'array');
 
-        $this->addConnectionsSection($rootNode);
-
         $rootNode
             ->children()
+                ->scalarNode('model_dir')->end()
                 ->booleanNode('logging')->end()
                 ->scalarNode('default_connection')->end()
             ->end()
+
+            ->fixXmlConfig('extra_config_classes_dir')
+            ->children()
+                ->arrayNode('extra_config_classes_dirs')
+                ->prototype('scalar')->end()
+            ->end()
         ;
+
+        $this->addConnectionsSection($rootNode);
 
         return $treeBuilder->buildTree();
     }

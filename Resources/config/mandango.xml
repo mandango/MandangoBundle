@@ -8,7 +8,9 @@
       <!-- mandango -->
       <parameter key="mandango.class">Mandango\Mandango</parameter>
       <parameter key="mandango.metadata.class">Model\Mapping\Metadata</parameter>
-      <parameter key="mandango.metadata.output">%kernel.root_dir%/../src/Model/Mapping</parameter>
+
+      <parameter key="mandango.model_dir">%kernel.root_dir%/../src/Model</parameter>
+      <parameter key="mandango.metadata.output">%mandango.model_dir%/Mapping</parameter>
 
       <!-- cache -->
       <parameter key="mandango.cache.filesystem_cache.class">Mandango\Cache\FilesystemCache</parameter>
