@@ -56,8 +56,9 @@ class MandangoTypeGuesser implements FormTypeGuesserInterface
                 case 'date':
                     return new TypeGuess('date', array(), Guess::MEDIUM_CONFIDENCE);
                 case 'float':
-                case 'integer':
                     return new TypeGuess('number', array(), Guess::MEDIUM_CONFIDENCE);
+                case 'integer':
+                    return new TypeGuess('integer', array(), Guess::MEDIUM_CONFIDENCE);
                 case 'raw':
                     return new TypeGuess('text', array(), Guess::MEDIUM_CONFIDENCE);
                 case 'serialized':
