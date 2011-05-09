@@ -41,31 +41,31 @@ class DocumentValidation extends Extension
 
         // fields
         foreach ($this->configClass['fields'] as $name => $field) {
-            if (isset($field['validation']) && $field['validation']) {
+            if (empty($field['inherited']) && isset($field['validation']) && $field['validation']) {
                 $validation['getters'][$name] = $field['validation'];
             }
         }
         // referencesOne
         foreach ($this->configClass['referencesOne'] as $name => $referenceOne) {
-            if (isset($referenceOne['validation']) && $referenceOne['validation']) {
+            if (empty($referenceOne['inherited']) && isset($referenceOne['validation']) && $referenceOne['validation']) {
                 $validation['getters'][$name] = $referenceOne['validation'];
             }
         }
         // referencesMany
         foreach ($this->configClass['referencesMany'] as $name => $referenceMany) {
-            if (isset($referenceMany['validation']) && $referenceMany['validation']) {
+            if (empty($referenceMany['inherited']) && isset($referenceMany['validation']) && $referenceMany['validation']) {
                 $validation['getters'][$name] = $referenceMany['validation'];
             }
         }
         // embeddedsOne
         foreach ($this->configClass['embeddedsOne'] as $name => $embeddedOne) {
-            if (isset($embeddedOne['validation']) && $embeddedOne['validation']) {
+            if (empty($embeddedOne['inherited']) && isset($embeddedOne['validation']) && $embeddedOne['validation']) {
                 $validation['getters'][$name] = $embeddedOne['validation'];
             }
         }
         // embeddedsMany
         foreach ($this->configClass['embeddedsMany'] as $name => $embeddedMany) {
-            if (isset($embeddedMany['validation']) && $embeddedMany['validation']) {
+            if (empty($embeddedMany['inherited']) && isset($embeddedMany['validation']) && $embeddedMany['validation']) {
                 $validation['getters'][$name] = $embeddedMany['validation'];
             }
         }
