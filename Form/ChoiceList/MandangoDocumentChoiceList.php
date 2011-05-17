@@ -26,7 +26,6 @@ class MandangoDocumentChoiceList extends ArrayChoiceList
     private $class;
     private $field;
     private $query;
-    private $choices;
 
     private $documents;
 
@@ -36,7 +35,6 @@ class MandangoDocumentChoiceList extends ArrayChoiceList
         $this->class = $class;
         $this->field = $field;
         $this->query = $query;
-        $this->choices = $choices;
 
         parent::__construct($choices);
     }
