@@ -23,8 +23,8 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
  */
 class MandangoUserProvider implements UserProviderInterface
 {
-    protected $class;
-    protected $property;
+    private $class;
+    private $property;
 
     /**
      * Constructor.

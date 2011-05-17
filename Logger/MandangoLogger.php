@@ -20,8 +20,8 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
  */
 class MandangoLogger
 {
-    protected $logger;
-    protected $queries = array();
+    private $logger;
+    private $queries;
 
     /**
      * Constructor.
@@ -31,6 +31,7 @@ class MandangoLogger
     public function __construct(LoggerInterface $logger = null)
     {
         $this->logger = $logger;
+        $this->queries = array();
     }
 
     /**

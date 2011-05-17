@@ -24,7 +24,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class MandangoDataCollector extends DataCollector
 {
-    protected $logger;
+    private $logger;
 
     /**
      * Constructor.

@@ -25,7 +25,7 @@ use Symfony\Component\Form\DataTransformer\TransformationFailedException;
  */
 class MandangoDocumentsToArrayTransformer implements DataTransformerInterface
 {
-    protected $choiceList;
+    private $choiceList;
 
     public function __construct(MandangoDocumentChoiceList $choiceList)
     {

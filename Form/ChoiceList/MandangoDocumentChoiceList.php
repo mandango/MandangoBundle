@@ -22,13 +22,13 @@ use Mandango\Mandango;
  */
 class MandangoDocumentChoiceList extends ArrayChoiceList
 {
-    protected $mandango;
-    protected $class;
-    protected $field;
-    protected $query;
-    protected $choices;
+    private $mandango;
+    private $class;
+    private $field;
+    private $query;
+    private $choices;
 
-    protected $documents;
+    private $documents;
 
     public function __construct(Mandango $mandango, $class, $field = null, Query $query = null, array $choices = array())
     {
