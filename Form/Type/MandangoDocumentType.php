@@ -17,6 +17,7 @@ use Mandango\MandangoBundle\Form\DataTransformer\MandangoDocumentsToArrayTransfo
 use Mandango\MandangoBundle\Form\EventListener\MergeGroupListener;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\AbstractType;
+use Mandango\Mandango;
 
 /**
  * MandangoDocumentType.
@@ -25,6 +26,18 @@ use Symfony\Component\Form\AbstractType;
  */
 class MandangoDocumentType extends AbstractType
 {
+    private $mandango;
+
+    /**
+     * Constructor.
+     *
+     * @param Mandango $mandango The mandango.
+     */
+    public function __construct(Mandango $mandango)
+    {
+        $this->mandango = $mandango;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -49,6 +62,7 @@ class MandangoDocumentType extends AbstractType
             'template' => 'choice',
             'multiple' => false,
             'expanded' => false,
+            'mandango' => $this->mandango,
             'class'    => null,
             'field'    => null,
             'query'    => null,
@@ -60,6 +74,7 @@ class MandangoDocumentType extends AbstractType
 
         if (!isset($options['choice_list'])) {
             $defaultOptions['choice_list'] = new MandangoDocumentChoiceList(
+                $options['mandango'],
                 $options['class'],
                 $options['field'],
                 $options['query'],

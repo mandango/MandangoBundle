@@ -11,8 +11,9 @@
 
 namespace Mandango\MandangoBundle\Form\ChoiceList;
 
-use Mandango\Query;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ArrayChoiceList;
+use Mandango\Query;
+use Mandango\Mandango;
 
 /**
  * MandangoDocumentChoiceList.
@@ -21,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\ChoiceList\ArrayChoiceList;
  */
 class MandangoDocumentChoiceList extends ArrayChoiceList
 {
+    protected $mandango;
     protected $class;
     protected $field;
     protected $query;
@@ -28,8 +30,9 @@ class MandangoDocumentChoiceList extends ArrayChoiceList
 
     protected $documents;
 
-    public function __construct($class, $field = null, Query $query = null, array $choices = array())
+    public function __construct(Mandango $mandango, $class, $field = null, Query $query = null, array $choices = array())
     {
+        $this->mandango = $mandango;
         $this->class = $class;
         $this->field = $field;
         $this->query = $query;
@@ -56,7 +59,7 @@ class MandangoDocumentChoiceList extends ArrayChoiceList
         } elseif ($this->query) {
             $documents = $this->query->all();
         } else {
-            $documents = call_user_func(array($this->class, 'getRepository'))->createQuery()->all();
+            $documents = $this->mandango->getRepository($this->class)->createQuery()->all();
         }
         $this->documents = $documents;
 

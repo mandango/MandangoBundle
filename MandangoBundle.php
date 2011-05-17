@@ -11,7 +11,6 @@
 
 namespace Mandango\MandangoBundle;
 
-use Mandango\Container as MandangoContainer;
 use Mandango\MandangoBundle\DependencyInjection\Compiler\MandangoMondatorPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,35 +26,10 @@ class MandangoBundle extends Bundle
     /**
      * {@inheritdoc}
      */
-    public function boot()
-    {
-        MandangoContainer::setLoader('default', array($this, 'loadMandango'));
-        MandangoContainer::setDefaultName('default');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function shutdown()
-    {
-        MandangoContainer::clear();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
 
         $container->addCompilerPass(new MandangoMondatorPass());
-    }
-
-    /**
-     * Loads the mandango.
-     */
-    public function loadMandango()
-    {
-        return $this->container->get('mandango');
     }
 }

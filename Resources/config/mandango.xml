@@ -7,10 +7,10 @@
     <parameters>
       <!-- mandango -->
       <parameter key="mandango.class">Mandango\Mandango</parameter>
-      <parameter key="mandango.metadata.class">Model\Mapping\Metadata</parameter>
+      <parameter key="mandango.metadata_factory.class">Model\Mapping\MetadataFactory</parameter>
 
       <parameter key="mandango.model_dir">%kernel.root_dir%/../src/Model</parameter>
-      <parameter key="mandango.metadata.output">%mandango.model_dir%/Mapping</parameter>
+      <parameter key="mandango.metadata_factory.output">%mandango.model_dir%/Mapping</parameter>
 
       <!-- cache -->
       <parameter key="mandango.cache.filesystem_cache.class">Mandango\Cache\FilesystemCache</parameter>
@@ -33,11 +33,11 @@
     <services>
         <!-- mandango -->
         <service id="mandango" class="%mandango.class%">
-            <argument type="service" id="mandango.metadata" />
+            <argument type="service" id="mandango.metadata_factory" />
             <argument type="service" id="mandango.query_cache.filesystem" />
         </service>
 
-        <service id="mandango.metadata" class="%mandango.metadata.class%">
+        <service id="mandango.metadata_factory" class="%mandango.metadata_factory.class%">
         </service>
 
         <!-- query cache -->
@@ -63,12 +63,12 @@
         <!-- form -->
         <service id="form.type.mandango_document" class="%form.type.mandango_document.class%">
             <tag name="form.type" alias="mandango_document" />
-            <argument type="service" id="mandango.metadata" />
+            <argument type="service" id="mandango" />
         </service>
 
         <service id="form.type_guesser.mandango" class="%form.type_guesser.mandango.class%">
             <tag name="form.type_guesser" />
-            <argument type="service" id="mandango.metadata" />
+            <argument type="service" id="mandango.metadata_factory" />
         </service>
     </services>
 </container>

@@ -14,7 +14,7 @@ namespace Mandango\MandangoBundle\Form;
 use Symfony\Component\Form\FormTypeGuesserInterface;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
-use Mandango\Metadata;
+use Mandango\MetadataFactory;
 
 /**
  * MandangoTypeGuesser
@@ -23,16 +23,16 @@ use Mandango\Metadata;
  */
 class MandangoTypeGuesser implements FormTypeGuesserInterface
 {
-    private $metadata;
+    private $metadataFactory;
 
     /**
      * Constructor.
      *
-     * @param Mandango\Metadata $metadata The Mandango's metadata.
+     * @param Mandango\MetadataFactory $metadata The Mandango's metadata.
      */
-    public function __construct(Metadata $metadata)
+    public function __construct(MetadataFactory $metadataFactory)
     {
-        $this->metadata = $metadata;
+        $this->metadataFactory = $metadataFactory;
     }
 
     /**
@@ -40,11 +40,11 @@ class MandangoTypeGuesser implements FormTypeGuesserInterface
      */
     public function guessType($class, $property)
     {
-        if (!$this->metadata->hasClass($class)) {
+        if (!$this->metadataFactory->hasClass($class)) {
             return;
         }
 
-        $metadata = $class::getMetadata();
+        $metadata = $this->metadataFactory->getClass($class);
 
         // field
         if (isset($metadata['fields'][$property])) {
