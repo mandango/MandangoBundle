@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Mandango\Mandango;
 
 /**
  * MandangoUserProvider.
@@ -23,17 +24,20 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
  */
 class MandangoUserProvider implements UserProviderInterface
 {
+    private $mandango;
     private $class;
     private $property;
 
     /**
      * Constructor.
      *
-     * @param string $class The class.
+     * @param Mandango    $mandango The mandango.
+     * @param string      $class    The class.
      * @param string|null $property The property (optional).
      */
-    public function __construct($class, $property = null)
+    public function __construct(Mandango $mandango, $class, $property = null)
     {
+        $this->mandango = $mandango;
         $this->class = $class;
         $this->property = $property;
     }
@@ -44,7 +48,7 @@ class MandangoUserProvider implements UserProviderInterface
     public function loadUserByUsername($username)
     {
         $class = $this->class;
-        $repository = $class::getRepository();
+        $repository = $this->mandango->getRepository($class);
 
         if (null !== $this->property) {
             $user = $repository->createQuery(array($this->property => $username))->one();
