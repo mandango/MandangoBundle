@@ -14,7 +14,7 @@
 
       <!-- cache -->
       <parameter key="mandango.cache.filesystem_cache.class">Mandango\Cache\FilesystemCache</parameter>
-      <parameter key="mandango.cache.filesystem_cache.dir">%kernel.cache_dir%/mandango/query_cache</parameter>
+      <parameter key="mandango.cache.filesystem_cache.dir">%kernel.cache_dir%/mandango/cache</parameter>
 
       <!-- mondator -->
       <parameter key="mandango.mondator.class">Mandango\Mondator\Mondator</parameter>
@@ -34,14 +34,14 @@
         <!-- mandango -->
         <service id="mandango" class="%mandango.class%">
             <argument type="service" id="mandango.metadata_factory" />
-            <argument type="service" id="mandango.query_cache.filesystem" />
+            <argument type="service" id="mandango.cache.filesystem" />
         </service>
 
         <service id="mandango.metadata_factory" class="%mandango.metadata_factory.class%">
         </service>
 
-        <!-- query cache -->
-        <service id="mandango.query_cache.filesystem" class="%mandango.cache.filesystem_cache.class%">
+        <!-- cache -->
+        <service id="mandango.cache.filesystem" class="%mandango.cache.filesystem_cache.class%">
             <argument>%mandango.cache.filesystem_cache.dir%</argument>
         </service>
 
