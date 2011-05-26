@@ -97,4 +97,11 @@ class MandangoTypeGuesser implements FormTypeGuesserInterface
     public function guessMaxLength($class, $property)
     {
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function guessMinLength($class, $property)
+    {
+    }
 }
