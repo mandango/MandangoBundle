@@ -53,7 +53,7 @@ class GenerateCommand extends Command
             if (is_dir($dir)) {
                 $finder = new Finder();
                 foreach ($finder->files()->name('*.yml')->followLinks()->in($dir) as $file) {
-                    foreach ((array) Yaml::load($file) as $class => $configClass) {
+                    foreach ((array) Yaml::parse($file) as $class => $configClass) {
                         // class
                         if (0 !== strpos($class, 'Model\\')) {
                             throw new \RuntimeException('The Mandango documents must been in the "Model\" namespace.');
@@ -78,7 +78,7 @@ class GenerateCommand extends Command
             if (is_dir($dir = $bundle->getPath().'/Resources/config/mandango')) {
                 $finder = new Finder();
                 foreach ($finder->files()->name('*.yml')->followLinks()->in($dir) as $file) {
-                    foreach ((array) Yaml::load($file) as $class => $configClass) {
+                    foreach ((array) Yaml::parse($file) as $class => $configClass) {
                         // class
                         if (0 !== strpos($class, 'Model\\')) {
                             throw new \RuntimeException('The mandango documents must been in the "Model\" namespace.');

@@ -83,7 +83,7 @@ class LoadFixturesCommand extends Command
 
         $data = array();
         foreach ($files as $file) {
-            $data = Util::arrayDeepMerge($data, (array) Yaml::load($file));
+            $data = Util::arrayDeepMerge($data, (array) Yaml::parse($file));
         }
 
         if (!$data) {
