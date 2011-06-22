@@ -70,7 +70,7 @@ class MandangoUserProvider implements UserProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function loadUser(UserInterface $user)
+    public function refreshUser(UserInterface $user)
     {
         if (!$user instanceof $this->class) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
