@@ -11,7 +11,7 @@
 
 namespace Mandango\MandangoBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Pablo Díez <pablodip@gmail.com>
  */
-class EnsureIndexesCommand extends Command
+class EnsureIndexesCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -41,6 +41,6 @@ class EnsureIndexesCommand extends Command
     {
         $output->writeln('ensuring the indexes');
 
-        $this->container->get('mandango')->ensureAllIndexes();
+        $this->getContainer()->get('mandango')->ensureAllIndexes();
     }
 }

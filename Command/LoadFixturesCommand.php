@@ -13,7 +13,7 @@ namespace Mandango\MandangoBundle\Command;
 
 use Mandango\DataLoader;
 use Mandango\MandangoBundle\Util;
-use Symfony\Bundle\FrameworkBundle\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,7 +25,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author Pablo Díez <pablodip@gmail.com>
  */
-class LoadFixturesCommand extends Command
+class LoadFixturesCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -53,11 +53,11 @@ class LoadFixturesCommand extends Command
         } else {
             $dirOrFile = array();
             // application
-            if (is_dir($dir = $this->container->getParameter('kernel.root_dir').'/fixtures/mandango')) {
+            if (is_dir($dir = $this->getContainer()->getParameter('kernel.root_dir').'/fixtures/mandango')) {
                 $dirOrFile[] = $dir;
             }
             // bundles
-            foreach ($this->container->get('kernel')->getBundles() as $bundle) {
+            foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
                 if (is_dir($dir = $bundle->getPath().'/Resources/fixtures/mandango')) {
                     $dirOrFile[] = $dir;
                 }
@@ -94,7 +94,7 @@ class LoadFixturesCommand extends Command
 
         $output->writeln('loading fixtures');
 
-        $dataLoader = new DataLoader($this->container->get('mandango'));
+        $dataLoader = new DataLoader($this->getContainer()->get('mandango'));
         $dataLoader->load($data, $input->getOption('append'));
     }
 }

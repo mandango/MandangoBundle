@@ -11,7 +11,7 @@
 
 namespace Mandango\MandangoBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
@@ -22,7 +22,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author Pablo Díez <pablodip@gmail.com>
  */
-class GenerateCommand extends Command
+class GenerateCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -42,13 +42,13 @@ class GenerateCommand extends Command
     {
         $output->writeln('processing config classes');
 
-        $modelDir = $this->container->getParameter('mandango.model_dir');
+        $modelDir = $this->getContainer()->getParameter('mandango.model_dir');
 
         $configClasses = array();
         // application + extra
         foreach (array_merge(
-            array($this->container->getParameter('kernel.root_dir').'/config/mandango'),
-            $this->container->getParameter('mandango.extra_config_classes_dirs')
+            array($this->getContainer()->getParameter('kernel.root_dir').'/config/mandango'),
+            $this->getContainer()->getParameter('mandango.extra_config_classes_dirs')
         ) as $dir) {
             if (is_dir($dir)) {
                 $finder = new Finder();
@@ -72,7 +72,7 @@ class GenerateCommand extends Command
         }
         // bundles
         $configClassesPending = array();
-        foreach ($this->container->get('kernel')->getBundles() as $bundle) {
+        foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
             $bundleModelNamespace = 'Model\\'.$bundle->getName();
 
             if (is_dir($dir = $bundle->getPath().'/Resources/config/mandango')) {
@@ -111,7 +111,7 @@ class GenerateCommand extends Command
 
         $output->writeln('generating classes');
 
-        $mondator = $this->container->get('mandango.mondator');
+        $mondator = $this->getContainer()->get('mandango.mondator');
         $mondator->setConfigClasses($configClasses);
         $mondator->process();
     }
