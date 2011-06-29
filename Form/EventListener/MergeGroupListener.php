@@ -24,7 +24,7 @@ class MergeGroupListener implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(FormEvents::BIND_NORM_DATA);
+        return array(FormEvents::BIND_NORM_DATA => 'onBindNormData');
     }
 
     public function onBindNormData(FilterDataEvent $event)
