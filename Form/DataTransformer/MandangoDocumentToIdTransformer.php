@@ -48,6 +48,6 @@ class MandangoDocumentToIdTransformer implements DataTransformerInterface
 
         $documents = $this->choiceList->getDocuments();
 
-        return $documents[$key];
+        return array_key_exists($key, $documents) ? $documents[$key] : null;
     }
 }
