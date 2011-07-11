@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
+use Mandango\MandangoBundle\Util;
 
 /**
  * GenerateCommand.
@@ -70,6 +71,7 @@ class GenerateCommand extends ContainerAwareCommand
                 }
             }
         }
+
         // bundles
         $configClassesPending = array();
         foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
@@ -95,18 +97,23 @@ class GenerateCommand extends ContainerAwareCommand
                         $configClass['bundle_namespace'] = $bundle->getNamespace();
                         $configClass['bundle_dir']       = $bundle->getPath();
 
-                        $configClasses[$class] = $configClass;
+                        if (isset($configClasses[$class])) {
+                            $configClasses[$class] = Util::arrayDeepMerge($configClasses[$class], $configClass);
+                        } else {
+                            $configClasses[$class] = $configClass;
+                        }
                     }
                 }
             }
         }
+
         // merge bundles
         foreach ($configClassesPending as $pending) {
             if (!isset($configClasses[$pending['class']])) {
                 throw new \RuntimeException(sprintf('The class "%s" does not exist.', $pending['class']));
             }
 
-            $configClasses[$pending['class']] = array_merge_recursive($pending['config_class'], $configClasses[$pending['class']]);
+            $configClasses[$pending['class']] = Util::arrayDeepMerge($pending['config_class'], $configClasses[$pending['class']]);
         }
 
         $output->writeln('generating classes');
