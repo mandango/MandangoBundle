@@ -95,6 +95,6 @@ class LoadFixturesCommand extends ContainerAwareCommand
         $output->writeln('loading fixtures');
 
         $dataLoader = new DataLoader($this->getContainer()->get('mandango'));
-        $dataLoader->load($data, $input->getOption('append'));
+        $dataLoader->load($data, !$input->getOption('append'));
     }
 }
