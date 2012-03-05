@@ -1,0 +1,7 @@
+/phpunit.xml
+/vendor/
+/TestsProject/app/cache/
+/TestsProject/app/log/
+/TestsProject/src/Model/Base/
+/TestsProject/src/Model/Mapping/
+/TestsProject/src/Model/*/Base/

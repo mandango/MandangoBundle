@@ -14,7 +14,7 @@ namespace Mandango\MandangoBundle\Logger;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 /**
- * MandangoDataCollector.
+ * MandangoLogger.
  *
  * @author Pablo Díez <pablodip@gmail.com>
  */
