@@ -28,6 +28,9 @@
       <!-- form -->
       <parameter key="form.type.mandango_document.class">Mandango\MandangoBundle\Form\Type\MandangoDocumentType</parameter>
       <parameter key="form.type_guesser.mandango.class">Mandango\MandangoBundle\Form\MandangoTypeGuesser</parameter>
+
+      <!-- validator -->
+      <parameter key="mandango.validator.unique_document.class">Mandango\MandangoBundle\Validator\Constraint\UniqueDocumentValidator</parameter>
     </parameters>
 
     <services>
@@ -69,6 +72,12 @@
         <service id="form.type_guesser.mandango" class="%form.type_guesser.mandango.class%">
             <tag name="form.type_guesser" />
             <argument type="service" id="mandango.metadata_factory" />
+        </service>
+
+        <!-- validator -->
+        <service id="mandango.validator.unique_document" class="%mandango.validator.unique_document.class%">
+            <tag name="validator.constraint_validator" alias="mandango.validator.unique_document" />
+            <argument type="service" id="mandango" />
         </service>
     </services>
 </container>
