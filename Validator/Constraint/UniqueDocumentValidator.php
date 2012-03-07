@@ -50,13 +50,13 @@ class UniqueDocumentValidator extends ConstraintValidator
         $caseInsensitive = $this->parseCaseInsensitive($constraint->caseInsensitive);
 
         $query = $this->createQuery($document, $fields, $caseInsensitive);
-        $nbResults = $query->count();
+        $numberResults = $query->count();
 
-        if (0 === $nbResults) {
+        if (0 === $numberResults) {
             return true;
         }
 
-        if (1 === $nbResults) {
+        if (1 === $numberResults) {
             $result = $query->one();
             if ($result === $document) {
                 return true;
@@ -81,14 +81,14 @@ class UniqueDocumentValidator extends ConstraintValidator
 
     private function parseFields($fields)
     {
-        if (!is_array($fields) && !is_string($fields)) {
+        if (is_string($fields)) {
+            $fields = array($fields);
+        } elseif (is_array($fields)) {
+            if (0 === count($fields)) {
+                throw new ConstraintDefinitionException('At least one field has to be specified.');
+            }
+        } else {
             throw new UnexpectedTypeException($fields, 'array');
-        }
-
-        $fields = (array) $fields;
-
-        if (0 === count($fields)) {
-            throw new ConstraintDefinitionException('At least one field has to be specified.');
         }
 
         return $fields;
