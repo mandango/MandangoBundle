@@ -36,7 +36,7 @@ class LoadFixturesCommand extends ContainerAwareCommand
             ->setName('mandango:load-fixtures')
             ->setDescription('Load fixtures.')
             ->addOption('fixtures', null, InputOption::VALUE_OPTIONAL, 'The directory or file to load data fixtures from')
-            ->addOption('append', null, InputOption::VALUE_OPTIONAL, 'Whether or not to append the data fixtures', false)
+            ->addOption('append', null, InputOption::VALUE_NONE, 'Whether or not to append the data fixtures')
         ;
     }
 
