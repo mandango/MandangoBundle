@@ -39,7 +39,7 @@ class FixMissingReferencesCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('ensuring the indexes');
+        $output->writeln('fixing missing references');
 
         $this->getContainer()->get('mandango')->fixAllMissingReferences();
     }
