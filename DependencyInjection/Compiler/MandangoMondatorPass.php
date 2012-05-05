@@ -55,7 +55,7 @@ class MandangoMondatorPass implements CompilerPassInterface
 
         // custom
         foreach ($container->findTaggedServiceIds('mandango.mondator.extension') as $id => $attributes) {
-            $definition->addMethodCall('addExtension', array(new Reference($id)));
+            $mondatorDefinition->addMethodCall('addExtension', array(new Reference($id)));
         }
     }
 }
