@@ -37,7 +37,7 @@ class MandangoDocumentToIdTransformer implements DataTransformerInterface
             return null;
         }
 
-        return $document->getId()->__toString();
+        return (string) $document->getId();
     }
 
     public function reverseTransform($key)
