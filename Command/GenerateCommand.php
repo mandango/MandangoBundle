@@ -98,7 +98,9 @@ class GenerateCommand extends ContainerAwareCommand
                         $configClass['bundle_dir']       = $bundle->getPath();
 
                         if (isset($configClasses[$class])) {
-                            $configClasses[$class] = Util::arrayDeepMerge($configClasses[$class], $configClass);
+                            $previousConfigClass = $configClasses[$class];
+                            unset($configClasses[$class]);
+                            $configClasses[$class] = Util::arrayDeepMerge($previousConfigClass, $configClass);
                         } else {
                             $configClasses[$class] = $configClass;
                         }
